@@ -29,3 +29,20 @@ jobs:
       - uses: SonarSource/sonarqube-scan-action@59202af334b4ba7b5db01b701b8e79f8b3bef0f4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+ 
+  snyk:
+    name: Snyk - analyse des dependances (SCA)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Installer les dependances
+        run: pip install --only-binary ":all:" --require-hashes -r app/requirements.txt
+      # snyk/actions/setup v1.0.0, fixee par son hash de commit
+      - uses: snyk/actions/setup@9adf32b1121593767fc3c057af55b55db032dc04
+      - name: Scan Snyk (bloque si HIGH ou CRITICAL)
+        run: snyk test --file=app/requirements.txt --package-manager=pip --severity-threshold=high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}  
