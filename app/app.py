@@ -8,6 +8,19 @@ app = Flask(__name__)
 csrf = CSRFProtect(app)
 
 
+@app.after_request
+def en_tetes_de_securite(response):
+    # En-tetes HTTP de securite, verifies par OWASP ZAP
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none'"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["Permissions-Policy"] = "geolocation=(), camera=(), microphone=()"
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Cross-Origin-Resource-Policy"] = "same-origin"
+    return response
+
+
 @app.get("/")
 def home():
     return jsonify(message="SecureCloud PME - application en ligne")
