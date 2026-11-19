@@ -25,7 +25,7 @@ def en_tetes_de_securite(response):
 
 @app.get("/")
 def home():
-    return jsonify(message="SecureCloud PME - application en ligne")
+    return jsonify(message="SecureCloud PME - application en ligne-version-enligne")
 
 
 @app.get("/health")
