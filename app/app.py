@@ -25,7 +25,7 @@ def en_tetes_de_securite(response):
 
 @app.get("/")
 def home():
-    return jsonify(message="demonstration de securite pour l'ALB AWS")
+    return jsonify(message="demonstration de securite pour l'ALB AWS avec ZAP")
 
 
 @app.get("/health")
